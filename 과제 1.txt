@@ -1,0 +1,89 @@
+파이썬 변수의 유효 범위 (scope)
+
+LEGB규칙
+  - 유효범위 규칙(Scope Rule): 변수에 접근 가능한 범위, 변수가 유효한 문맥(Context)범위를 정하는 규칙.
+
+L Local: 함수 내 정의된 지역 변수
+E Enclosing Function Local: 함수를 내포하는 또다른 함수 영역
+  - (파이썬은 다른 언어와 다르게 함수 내부에 또 다른 함수를 정의 할 수 있음.)
+G Global: 함수 영역에 포함되지 않는 모듈 영역
+B Built-in: 내장 영역
+
+다음 예제를 실습해보고 지역변수, 전역변수를 설정하고 영향을 미치는 범위를 확인해보자.
+(참고 설명 : https://yes90.tistory.com/48)
+
+(예제 1)
+# 변수가 함수 내에 정의되면 지역변수(Local) 변수, 함수 외부에 정의되면 모듈 전역(Global)변수.
+# %%
+x = 10
+y = 11
+
+def foo():
+    x = 20
+    def bar():
+        a = 30
+        print(f'a = {a}, X = {x}, y = {y}')
+
+    bar()
+    x = 40
+    bar()
+
+foo()
+
+(예제 2)
+#python 에약어도 변수로 사용시 에러가 안난다.
+#그대신 부작용이 있다.
+# %%
+
+print(abs)
+abs = 10
+abs(-5)
+
+del abs
+abs(-5)
+
+(예제 3)
+# global 예약어를 사용하는 경우
+# %%
+def f(a):
+    global h
+
+    h = a + 5
+    a = 20
+
+a = 10
+f(a)
+print(f'h = {h}, a = {a}')
+
+(예제 4)
+# global 예약어를  잘 못 사용하여 에러가 나는 경우
+
+#%%
+g = 10
+def f():
+    a = g
+    g = 20
+
+    return a
+
+f()
+
+(예제 5)
+전역변수도 아니고 지역변수도 아닌 변수를 참조해야 할 때
+# %%
+def outer():
+    x = 1
+    def inner():
+        global y
+        nonlocal x
+
+        x = 2
+        print('inner : ', x)
+    
+    inner()
+    print('outer : ', x)
+
+outer()
+
+
+# %%
